@@ -1,5 +1,10 @@
 {
     "type": "object",
+    "required": [
+        "$schema",
+        "update",
+        "list"
+    ],
     "patternProperties": {
         "\\$schema": {
             "type": "string",
@@ -10,40 +15,51 @@
             "title": "更新配置文件的网络地址",
             "description": "执行 mcn update 将会从此处下载最新的配置文件"
         },
-        ".": {
-            "type": "object",
-            "title": "定义您的镜像源标记 (Package Manager Tag)",
-            "properties": {
-                "first": {
-                    "type": "array",
-                    "title": "预先执行的命令",
-                    "description": "命令会在文件修改前执行，若有命令返回错误，则退出程序"
-                },
-                "end": {
-                    "type": "array",
-                    "title": "修改完成后执行的命令",
-                    "description": "命令会在文件修改完后执行，可用于更新源数据库"
-                },
-                "files": {
-                    "type": "array",
-                    "title": "需要修改的文件",
-                    "descrption": "如果文件需要 root 权限才能修改那么程序要使用 root 权限运行，如果文件不存在会创建一个"
-                },
-                "mirrors": {
-                    "type": "array",
-                    "title": "镜像源地址",
-                    "description": "可以自己找镜像源填入这里"
-                },
-                "format": {
-                    "type": "array",
-                    "title": "格式化镜像源",
-                    "description": "某些镜像源文件是有格式的，使用此项即可"
+        "list": {
+            "type": "array",
+            "title": "所有可以更换的源",
+            "description": "",
+            "items": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "files",
+                    "mirrors",
+                    "format"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "title": "镜像源标记 (PackageManagerTag)",
+                        "description": "使用这个标记来运行"
+                    },
+                    "first": {
+                        "type": "array",
+                        "title": "预先执行的命令",
+                        "description": "命令会在文件修改前执行，若有命令返回错误，则退出程序"
+                    },
+                    "end": {
+                        "type": "array",
+                        "title": "修改完成后执行的命令",
+                        "description": "命令会在文件修改完后执行，可用于更新源数据库"
+                    },
+                    "files": {
+                        "type": "array",
+                        "title": "需要修改的文件",
+                        "descrption": "如果文件需要 root 权限才能修改那么程序要使用 root 权限运行，如果文件不存在会创建一个"
+                    },
+                    "mirrors": {
+                        "type": "array",
+                        "title": "镜像源地址",
+                        "description": "可以自己找镜像源填入这里"
+                    },
+                    "format": {
+                        "type": "array",
+                        "title": "格式化镜像源",
+                        "description": "某些镜像源文件是有格式的，使用此项即可"
+                    }
                 }
             }
         }
-    },
-    "required": [
-        "$schema",
-        "update"
-    ]
+    }
 }
