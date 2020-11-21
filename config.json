@@ -1,0 +1,22 @@
+{
+    "$schema": "./schema.json",
+    "update": "https://raw.githubusercontent.com/hbk01/MirrorCN/master/config.json",
+    "pacman": {
+        "first": [
+            "pacman --version"
+        ],
+        "end": [
+            "pacman -Syy"
+        ],
+        "files": [
+            "/etc/pacman.d/mirrorlist"
+        ],
+        "mirrors": [
+            "https://mirrors.tuna.tsinghua.edu.cn/manjaro/stable/$repo/$arch"
+        ],
+        "format": [
+            "## China Server",
+            "Server = $mirrors"
+        ]
+    }
+}
