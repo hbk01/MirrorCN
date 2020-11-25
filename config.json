@@ -1,42 +1,55 @@
 {
     "$schema": "./schema.json",
     "update": "https://raw.githubusercontent.com/hbk01/MirrorCN/master/config.json",
+    "debug": true,
     "list": [
         {
-            "name": "pacman",
+            "name": "hosts",
+            "files": ["/etc/hosts"],
+            "mirrors": [
+                "199.232.68.133 github.com"
+            ],
+            "format": [
+                "# append by $app",
+                "$mirror"
+            ],
+            "title": "# Append by $app, project on github: $url"
+        },
+        {
+            "name": "mirror0",
             "first": [
                 "pacman --version"
             ],
             "end": [
                 "pacman -Syy"
             ],
-            "files": [
-                "/etc/pacman.d/mirrorlist"
+            "files": [  
+                "/home/hbk/go/src/github.com/hbk01/MirrorCN/mirror.txt"
             ],
             "mirrors": [
                 "https://mirrors.tuna.tsinghua.edu.cn/manjaro/stable/$repo/$arch"
             ],
             "format": [
                 "",
-                ""
+                "# Append by $app",
+                "# Project is on: $url",
+                "Server = $mirror"
             ]
         },
         {
-            "name": "apt",
-            "first": [
-                "apt --version"
-            ],
-            "end": [
-                "apt update && apt upgradle"
-            ],
             "files": [
-                "/etc/apt/mirrors"
+                "/home/hbk/go/src/github.com/hbk01/MirrorCN/mirror.list",
+                "/home/hbk/go/src/github.com/hbk01/MirrorCN/mirror.txt"
             ],
             "mirrors": [
-                ""
+                "https://goproxy.com/"
             ],
+            "name": "mirror1",
             "format": [
-                ""
+                "",
+                "// Append by $app at $date $time",
+                "// Project is on: $url",
+                "GOPROXY=$mirror"
             ]
         }
     ]

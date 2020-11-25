@@ -15,6 +15,11 @@
             "title": "更新配置文件的网络地址",
             "description": "执行 mcn update 将会从此处下载最新的配置文件"
         },
+        "debug": {
+            "type": "boolean",
+            "title": "是否进入Debug模式",
+            "description": "在Debug模式中，输出的内容会更加的详细"
+        },
         "list": {
             "type": "array",
             "title": "所有可以更换的源",
@@ -56,7 +61,12 @@
                     "format": {
                         "type": "array",
                         "title": "格式化镜像源",
-                        "description": "某些镜像源文件是有格式的，使用此项即可"
+                        "description": "某些镜像源文件是有格式的，使用此项即可。可使用变量：$name、$file、$mirror、$date、$time、$app、$url"
+                    },
+                    "title": {
+                        "type":"string",
+                        "title":"标题",
+                        "description":"标题只会输出一次，在镜像源前输出。"
                     }
                 }
             }
