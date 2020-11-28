@@ -14,20 +14,21 @@ import (
 
 // PackageManager in the config.json is a list
 type PackageManager struct {
-	Name    string   `json:"name"`
-	Title   string   `json:"title"`
-	First   []string `json:"first"`
-	End     []string `json:"end"`
-	Files   []string `json:"files"`
-	Mirrors []string `json:"mirrors"`
-	Format  []string `json:"format"`
+	Name    string   `json:"name"`    // 镜像源名称
+	Title   string   `json:"title"`   // 标题只会输出一次，在镜像源前输出。
+	Backup  string   `json:"backup"`  // 备份到哪里，默认备份到当前目录，以.bak结尾
+	First   []string `json:"first"`   // 先执行的操作
+	End     []string `json:"end"`     // 替换结束后执行的操作
+	Files   []string `json:"files"`   // 添加到哪个文件
+	Mirrors []string `json:"mirrors"` // 镜像源地址
+	Format  []string `json:"format"`  // 镜像格式
 }
 
 // Config the config.json struct
 type Config struct {
-	Update string           `json:"update"`
-	Debug  bool             `json:"debug"`
-	PM     []PackageManager `json:"list"`
+	Update string           `json:"update"` // 配置文件更新地址
+	Debug  bool             `json:"debug"`  // 是否开启Debug模式，该模式输出更详细的信息
+	PM     []PackageManager `json:"list"`   // 源列表
 }
 
 var (
@@ -60,6 +61,7 @@ var (
 
 func main() {
 	// TODO 新增了一个 title 字段
+	// TODO 新增了一个 backup 字段
 	log(1, "Starting parse arguements", "")
 	pms := parseArgs(os.Args)
 	log(2, "Will change", strings.Join(pms, ", "))
@@ -156,17 +158,44 @@ func changePm(pm PackageManager) {
 		log(2, "Change '"+pm.Name+"' on ", file)
 		f, err := os.OpenFile(file, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0655)
 		if err != nil {
-			panic("Error for open file, retry use root premission.")
+			log(2, "Open file error", file)
+			return
 		}
+		// 备份文件
+		var backupPath string
+		if pm.Backup == "" {
+			backupPath = file + ".bak"
+		} else {
+			backupPath = pm.Backup
+		}
+		srcBytes, err := ioutil.ReadFile(file)
+		if err != nil {
+			log(2, "Write backup file error", err.Error())
+			return
+		}
+
+		err = ioutil.WriteFile(backupPath, srcBytes, 0655)
+		if err != nil {
+			log(2, "Write backup file error", err.Error())
+			return
+		}
+
+		// 写入 title
+		_, err = f.WriteString(pm.Title)
+		if err != nil {
+			log(2, "Write title error", pm.Title)
+		}
+		// 写入源
 		for _, mirror := range pm.Mirrors {
 			for _, format := range pm.Format {
-				_, err := f.WriteString(replaceFormat(format, map[string]string{
+				s := replaceFormat(format, map[string]string{
 					"mirror": mirror,
 					"file":   file,
 					"name":   pm.Name,
-				}) + "\n")
+				}) + "\n"
+				_, err := f.WriteString(s)
 				if err != nil {
-					panic("Error for write file, retry use root premission.")
+					log(2, "Write "+s+" into "+file+" error", err.Error())
 				}
 			}
 		}

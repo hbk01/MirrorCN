@@ -35,8 +35,13 @@
                 "properties": {
                     "name": {
                         "type": "string",
-                        "title": "镜像源标记 (PackageManagerTag)",
+                        "title": "镜像源名称",
                         "description": "使用这个标记来运行"
+                    },
+                    "backup": {
+                        "type": "string",
+                        "title": "备份到哪里",
+                        "description": "如果不指定，则默认备份到当前目录，并以.bak结尾"
                     },
                     "first": {
                         "type": "array",
@@ -64,9 +69,9 @@
                         "description": "某些镜像源文件是有格式的，使用此项即可。可使用变量：$name、$file、$mirror、$date、$time、$app、$url"
                     },
                     "title": {
-                        "type":"string",
-                        "title":"标题",
-                        "description":"标题只会输出一次，在镜像源前输出。"
+                        "type": "string",
+                        "title": "标题",
+                        "description": "标题只会输出一次，在镜像源前输出。"
                     }
                 }
             }
